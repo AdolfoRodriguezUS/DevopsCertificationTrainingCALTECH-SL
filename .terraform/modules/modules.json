@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"only_rules","Source":"terraform-aws-modules/security-group/aws","Version":"4.3.0","Dir":".terraform/modules/only_rules"},{"Key":"","Source":"","Dir":"."}]}

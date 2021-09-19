@@ -1,0 +1,43 @@
+---
+- hosts: Project_Nodes
+  tasks:
+    - name: update APT package manager repositories cache
+      become: true
+      apt:
+         update_cache: yes
+
+
+    - name: Install JAVA using ANSIBLE
+      become: yes
+      apt:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+           - default-jdk
+
+    - name: Install JENKINS using ANSIBLE
+      apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+      become: yes
+    - name: Validate Configuration of Jenkins Repository
+      apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+      become: yes
+    - name: Ensure Jenkins is installed
+      apt: name=jenkins update_cache=yes
+      become: yes
+    - name: ensure Jenkins is running
+      service: name=jenkins state=started
+
+    - name: Check for Python with ANSIBLE raw command
+      raw: test -e /usr/bin/python
+      changed_when: false
+      failed_when: false
+      register: check_python  
+
+    - name: Install PYTHON using ANSIBLE
+      raw: sudo apt -y update && sudo apt install -y python
+      when: check_python.rc != 0
+
+
+
+
